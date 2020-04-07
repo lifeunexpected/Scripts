@@ -1,10 +1,7 @@
 #!/bin/sh
 # encoding: utf-8
 
-# Made by Lux 07-February-2020
-# v1.1
-
-# Scripts are based on code by these:
+# Scripts are based on code by:
 # https://groups.google.com/forum/#!topic/munki-dev/FADUXPWJeds - Michal Moravec
 # https://github.com/rednoah/notarize-app/blob/master/notarize-app - rednoah
 # https://github.com/munki/munki/tree/master/code/tools - Greg Neagle
