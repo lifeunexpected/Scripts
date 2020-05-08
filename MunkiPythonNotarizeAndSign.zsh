@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 # encoding: utf-8
 
 # Scripts are based on code by:
@@ -39,6 +39,10 @@ LocalUser=AccountUsername
 
 # Stop changing!
 #______________________
+
+# Update munki too latest version
+# Disable with # before the command if you dont want it to update
+git pull
  
 # Building, signing and notarizing Python framework
  
