@@ -27,8 +27,6 @@ DevApp="Developer ID Application: Name/Company (ID)"
 DevInst="Developer ID Installer: Name/Company (ID)"
 # Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
 BUNDLE_ID="com.googlecode.munki"
-# Change the version number because this will change on each version of Munki
-BUNDLE_PKG=$MUNKIROOT/munkitools-4.1.2.3939.pkg
 # Username
 AppleAcc="DeveloperAppleAcc@Apple.com"
 # Apple Developer app-specific password
@@ -65,6 +63,10 @@ codesign --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst"
 
+# Get filename for munkitools file that was created above
+BUNDLE_PKG=$( ls munkitools-[0-9]* )
+
+# prepair munkitools for notarization and signing
 sudo chown $LocalUser $BUNDLE_PKG 
 
 # Notarizing and signing munkitools.pkg
