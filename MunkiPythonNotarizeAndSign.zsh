@@ -108,6 +108,10 @@ if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$App
 			# once notarization is complete, run stapler and exit
 			if ! grep -q "Status: in progress" "$NOTARIZE_INFO_LOG"; then
 				xcrun stapler staple "$BUNDLE_PKG"
+			      	mv $BUNDLE_PKG Notarized-$BUNDLE_PKG
+				# Renames the $BUNDLE_PKG file too Notarized-$BUNDLE_PKG so the script can run again without any problems
+	      			echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"
+	      			echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
 				exit $?
 			fi
 		else
@@ -119,9 +123,3 @@ else
 	cat "$NOTARIZE_APP_LOG" 1>&2
 	exit 1
 fi
-
-# Rename the file to Notarized-$BUNDLE_PKG so the script can run again without any problems	
-mv $BUNDLE_PKG Notarized-$BUNDLE_PKG	
-echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"	
-#	
-echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
