@@ -1,6 +1,10 @@
 #!/bin/zsh
 # encoding: utf-8
 
+# Made by Lux
+	
+# https://github.com/lifeunexpected
+
 # Scripts are based on code by:
 # https://groups.google.com/forum/#!topic/munki-dev/FADUXPWJeds - Michal Moravec
 # https://github.com/rednoah/notarize-app/blob/master/notarize-app - rednoah
@@ -42,7 +46,14 @@ LocalUser=AccountUsername
 # Disable with # before the command if you dont want it to update
 git pull
  
-# Building, signing and notarizing Python framework
+# Rename existing munkitools files	
+Old_PKG=$( ls munkitools-[0-9]* )	
+if [[ -f $Old_PKG ]]; then	
+    mv $Old_PKG Unkown-$Old_PKG	
+    echo "Renamed $Old_PKG to Unkown-$Old_PKG to let the script run properly later on"	
+fi	
+# Python notarization part of the sript
+# _____________________
  
 $MUNKIROOT/code/tools/build_python_framework.sh
 
@@ -109,3 +120,9 @@ else
 	cat "$NOTARIZE_APP_LOG" 1>&2
 	exit 1
 fi
+
+# Rename the file to Notarized-$BUNDLE_PKG so the script can run again without any problems	
+mv $BUNDLE_PKG Notarized-$BUNDLE_PKG	
+echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"	
+#	
+echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
