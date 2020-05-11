@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 # Made by Lux
-	
 # https://github.com/lifeunexpected
 
 # Scripts are based on code by:
@@ -31,27 +30,25 @@ DevApp="Developer ID Application: Name/Company (ID)"
 DevInst="Developer ID Installer: Name/Company (ID)"
 # Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
 BUNDLE_ID="com.googlecode.munki"
-# Username
-AppleAcc="DeveloperAppleAcc@Apple.com"
 # Apple Developer app-specific password
+AppleAcc="DeveloperAppleAcc@Apple.com"
 # https://support.apple.com/en-us/HT204397
 AppleAccPwd="Apple Developer Account app-specific password"
 
 # Stop changing!
-#______________________
 
 # Update munki too latest version
 # Disable with # before the command if you dont want it to update
 git pull
 
-# Rename existing munkitools files	
+# Rename existing munkitools files
 Old_PKG=$( ls munkitools-[0-9]* )
 if [[ -f $Old_PKG ]]; then
     mv $Old_PKG Unkown-$Old_PKG
     echo "Renamed $Old_PKG to Unkown-$Old_PKG to let the script run properly later on"
 fi
+
 # Python notarization part of the sript
-# _____________________
 
 $MUNKIROOT/code/tools/build_python_framework.sh
 
@@ -98,10 +95,9 @@ if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$App
 
 	# check status periodically
 	while sleep 60 && date; do
-
   echo "Waiting on Apple too approve the notarization so it can be stapled. This can take a few minutes or more. Script auto checks every 60 sec"
 
-    		# check notarization status
+		# check notarization status
 		if xcrun altool --notarization-info "$RequestUUID" --username "$AppleAcc" --password "$AppleAccPwd" > "$NOTARIZE_INFO_LOG" 2>&1; then
 			cat "$NOTARIZE_INFO_LOG"
 
