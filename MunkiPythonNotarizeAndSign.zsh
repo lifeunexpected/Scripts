@@ -36,8 +36,6 @@ AppleAcc="DeveloperAppleAcc@Apple.com"
 # Apple Developer app-specific password
 # https://support.apple.com/en-us/HT204397
 AppleAccPwd="Apple Developer Account app-specific password"
-# Change to your username
-LocalUser=AccountUsername
 
 # Stop changing!
 #______________________
@@ -78,6 +76,7 @@ sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$
 BUNDLE_PKG=$( ls munkitools-[0-9]* )
 
 # prepair munkitools for notarization and signing
+LocalUser=$(whoami)
 sudo chown $LocalUser $BUNDLE_PKG 
 
 # Notarizing and signing munkitools.pkg
