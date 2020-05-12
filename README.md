@@ -12,7 +12,7 @@ When and if Apple has approved it for notarization it gets automaticly stapled a
 You can then run the script again if you want too.
 
 ###### How to use:
-1: Open terminal --> cd "To the top folder you want munki to be in"
+1: Open terminal --> cd "To the folder you want munki to be in"
 
 2: Type in terminal: git clone https://github.com/munki/munki.git
 
