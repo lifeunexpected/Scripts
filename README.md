@@ -12,14 +12,22 @@ When and if Apple has approved it for notarization it gets automaticly stapled a
 You can then run the script again if you want too.
 
 ###### How to use:
-1: Open terminal --> cd "To the folder you want munki to be in"
 
-2: Type in terminal: git clone https://github.com/munki/munki.git
+1: Add your Apple developer account e-mail
+AppleAcc="DeveloperAppleAcc@Apple.com"
 
-3: Copy script to "munki/code/tools" folder
+2: Create an Apple Developer app-specific password with following the link below and add it to the script
+https://support.apple.com/en-us/HT204397
+AppleAccPwd="Apple Developer Account app-specific password"
 
-4: In terminal type "cd munki" where the git repo folder is located
+3: Open terminal --> cd "To the folder you want munki to be in"
 
-5: drag the script into the terminal window and run it
+4: Type in terminal: git clone https://github.com/munki/munki.git
 
-6: Enter Password when asked for it
+5: Copy script to "munki/code/tools" folder
+
+6: In terminal type "cd munki" where the git repo folder is located
+
+7: drag the script into the terminal window and run it
+
+8: Enter your computer Password when asked for it.
