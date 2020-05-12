@@ -13,8 +13,13 @@ You can then run the script again if you want too.
 
 ###### How to use:
 1: Open terminal --> cd "To the top folder you want munki to be in"
+
 2: Type in terminal: git clone https://github.com/munki/munki.git
-2: Copy script to "munki/code/tools" folder
-2: In terminal type "cd munki" where the git repo folder is located
-3: drag the script into the terminal window and run it
-4: Enter Password when asked for it
+
+3: Copy script to "munki/code/tools" folder
+
+4: In terminal type "cd munki" where the git repo folder is located
+
+5: drag the script into the terminal window and run it
+
+6: Enter Password when asked for it
