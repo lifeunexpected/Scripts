@@ -31,3 +31,17 @@ AppleAccPwd="Apple Developer Account app-specific password"
 7: drag the script into the terminal window and run it
 
 8: Enter your computer Password when asked for it.
+
+###### macOS Catalina error message that sometimes show:
+Problem: You might experience the following error when running this script or when you are running code/tools/make_munki_mpkg.sh
+
+The domain/default pair of (/Users/eric/Desktop/munki/code/client/munkilib/version, CFBundleShortVersionString) does not exist
+/Users/eric/Desktop/munki/code/client/munkilib/version is missing!
+Perhaps /Users/eric/Desktop/munki does not contain the munki source?
+
+https://github.com/munki/munki/issues/978
+
+The problem seems to be happen with some munki builds but not everyone.
+
+Partial fix: If you run macOS Mojave 10.14.6 and Xcode 11.3.1 this the latest version that supports Mojave it should now work without any problems.
+You can probably run older versions also but havent tried those. 
