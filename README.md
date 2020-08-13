@@ -32,7 +32,7 @@ AppleAccPwd="Apple Developer Account app-specific password"
 
 8: Enter your computer Password when asked for it.
 
-###### macOS Catalina error message that sometimes show:
+## macOS Catalina error message that sometimes show:
 Problem: You might experience the following error when running this script or when you are running code/tools/make_munki_mpkg.sh
 
 The domain/default pair of (/Users/eric/Desktop/munki/code/client/munkilib/version, CFBundleShortVersionString) does not exist
