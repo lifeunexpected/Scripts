@@ -44,5 +44,5 @@ https://github.com/munki/munki/issues/978
 The problem seems to be happen with some munki builds but not everyone.
 
 Partial fix: Try macOS Mojave 10.14.6 and Xcode 11.3.1 this the latest version that supports Mojave it should now work without any problems.
-Somebody have manged to make it work on macOS Catalina if they put the munki files in /Users/Shared folders but it didnt work for me.
+Somebody have manged to make it work on macOS Catalina if they put the munki files in /Users/Shared folders.
 You could probably run older versions of Xcode but havent tried. 
