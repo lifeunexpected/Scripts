@@ -52,17 +52,17 @@ fi
 
 $MUNKIROOT/code/tools/build_python_framework.sh
 
-find $MUNKIROOT/Python.framework/Versions/3.8/lib/ -type f -perm -u=x -exec codesign --deep --verbose -s "$DevApp" {} \;
-find $MUNKIROOT/Python.framework/Versions/3.8/bin/ -type f -perm -u=x -exec codesign --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/3.7/lib/ -type f -perm -u=x -exec codesign --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/3.7/bin/ -type f -perm -u=x -exec codesign --deep --verbose -s "$DevApp" {} \;
 
-find $MUNKIROOT/Python.framework/Versions/3.8/lib/ -type f -name "*dylib" -exec codesign --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/3.7/lib/ -type f -name "*dylib" -exec codesign --deep --verbose -s "$DevApp" {} \;
 
 /usr/libexec/PlistBuddy -c "Add :com.apple.security.cs.allow-unsigned-executable-memory bool true" $MUNKIROOT/entitlements.plist
 
-codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.8/Resources/Python.app/
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.7/Resources/Python.app/
 
-codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.8/bin/python3.8
-codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.8/bin/python3.8m
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.7/bin/python3.7
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.7/bin/python3.7m
 codesign --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
