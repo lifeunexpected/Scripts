@@ -49,10 +49,17 @@ You could probably run older versions of Xcode but havent tried.
 
 ## Build specific munki version
 More detailed information is here: https://github.com/munki/munki/wiki/Building-Munki-packages
-1: In terminal type "cd munki" where the git repo folder is located 
+
+1: In terminal type "cd munki" where the git repo folder is located
+
 2: Run "git tag" and press "Enter key" until you find the build version you want to make
+
 3: Run "Make_munki_mpkg_from_git.sh -b Version You Want To build"
+
 4: Copy MunkiPythonNotarizeAndSign.zsh to munki-git/code/tools/ The munki-git folder is created in the munki root folder.
+
 6: Drag munki/munki-git/code/tools/MunkiPythonNotarizeAndSign.zsh script into the terminal window and run it
+
 8: Enter your computer Password when asked for it.
+
 9: If everything goes correct a notarized packaged file will be built to munk/munki-git folder 
