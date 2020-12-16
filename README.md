@@ -1,6 +1,6 @@
 # Different scripts for macOS
 
-## MunkiPythonNotarizeAndSign
+## Munki Notarization scripts
 ###### lets you do the following:
 - Updates munki folder before updating so you get the latest version
 - Re-names previous munkitools-versions files to unkown-munkitools-version.pkg so the script later in the script runs correct.
@@ -50,14 +50,16 @@ You could probably run older versions of Xcode but havent tried.
 ## Build specific munki version
 More detailed information is here: https://github.com/munki/munki/wiki/Building-Munki-packages
 
-1: Copy Munki.Notarize.Specific.Git.Version.zsh to munki/code/tools
+1: First set up the Munki.Notarize.zsh and maybe test to see if it works correctly before you try this to build a specific version but you dont have to test that Munki.Notarize.zsh works but its easier to error search if something fails :)
 
-2: In terminal type "cd munki" where the git repo folder is located
+2: Copy Munki.Notarize.Specific.Git.Version.zsh and Munki.Notarize.zsh to munki/code/tools
 
-3: Run "git tag" in Terminal and press the "Enter" key until you find the build version you want to make
+3: In terminal type "cd munki" where the git repo folder is located
 
-4: Run "MunkiPythonNotarizeAndSign.zsh -b Version" to build the specific version you want
+4: Run "git tag" in Terminal and press the "Enter" key until you find the build version you want to make
 
-5: Enter your user account password when asked for it.
+5: Run "MunkiPythonNotarizeAndSign.zsh -b Version" to build the specific version you want
 
-8: If everything goes correct a notarized packaged file will be built to munk/munki-git folder
+6: Enter your user account password when asked for it.
+
+7: If everything goes correct a notarized packaged file will be built to munk/munki-git folder
