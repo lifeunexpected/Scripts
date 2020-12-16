@@ -10,18 +10,19 @@
 # https://github.com/munki/munki/tree/master/code/tools - Greg Neagle
 # https://stackoverflow.com/a/57083245 - Perry
 
-# 1: Copy script to Munki folder 
+# 1: Copy script to Munki folder
 # 2: In terminal "cd FolderWheremunki" git repo is located
-# 3: run script 
-# 4 Enter Password when asked for it 
+# 3: run script
+# 4 Enter Password when asked for it
 
-# Tip: if you get “You must first sign the relevant contracts online. (1048)” error 
+# Tip: if you get “You must first sign the relevant contracts online. (1048)” error
 # Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
 
 # Defaults do NOT Change!
 MUNKIROOT="."
 # Convert to absolute path.
 MUNKIROOT=$(cd "$MUNKIROOT"; pwd)
+OUTPUTDIR="$(pwd)"
 
 # Change what is needed below this line
 # _____________________
@@ -68,14 +69,14 @@ codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
 
-sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst"
+sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
 
 # Get filename for munkitools file that was created above
 BUNDLE_PKG=$( ls munkitools-[0-9]* )
 
 # prepair munkitools for notarization and signing
 LocalUser=$(whoami)
-sudo chown $LocalUser $BUNDLE_PKG 
+sudo chown $LocalUser $BUNDLE_PKG
 
 # Notarizing and signing munkitools.pkg
 
