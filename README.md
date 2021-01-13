@@ -52,14 +52,14 @@ More detailed information is here: https://github.com/munki/munki/wiki/Building-
 
 1: First set up the Munki.Notarize.zsh and maybe test to see if it works correctly before you try this to build a specific version but you dont have to test that Munki.Notarize.zsh works but its easier to error search if something fails :)
 
-2: Copy Munki.Notarize.Specific.Git.Version.zsh and Munki.Notarize.zsh to munki/code/tools
+2: Copy Munki.Notarize.Specific.Git.Version.zsh and Munki.Notarize.zsh to munki/code/tools/ folder
 
-3: In terminal type "cd munki" where the git repo folder is located
+3: In terminal type "cd munki" too where the git repo folder is located
 
 4: Run "git tag" in Terminal and press the "Enter" key until you find the build version you want to make
 
-5: Run "MunkiPythonNotarizeAndSign.zsh -b Version" to build the specific version you want
+5: Run "MunkiPythonNotarizeAndSign.zsh -b VersionNumber" to build the specific version you want
 
 6: Enter your user account password when asked for it.
 
-7: If everything goes correct a notarized packaged file will be built to munk/munki-git folder
+7: If everything goes correct a notarized packaged file will be built to munki/munki-git folder
