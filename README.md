@@ -11,7 +11,7 @@ When and if Apple approves it for notarization it gets automaticly stapled and s
 - Re-names the finished munkitools-version.pkg too Notarized-munkitools-version.pkg so it's easy to see it has been notarized. 
 You can then run the script again if you want too.
 
-######  Step 1: How to set up Apple Developer App-Specific Password:
+## Step 1: How to set up Apple Developer App-Specific Password:
 
 1: Create an Apple Developer app-specific password with following the link below.
 https://support.apple.com/en-us/HT204397
@@ -21,7 +21,7 @@ xcrun altool --store-password-in-keychain-item Apple_dev_acc -u 'AppleDev@accoun
 
 Explained: Add  your Apple Developer ID e-mail account behind " -u " and add Apple Developer app-specific password being " -p "
 
-###### Step 2: How to set up Munki and copy scripts to correct folder
+## Step 2: How to set up Munki and copy scripts to correct folder
 
 1: Open terminal --> cd "To the folder you want munki to be in"
 Tip: If you get some type of warning or access problem you could try to use this folder for munki building "/Users/Shared/"
