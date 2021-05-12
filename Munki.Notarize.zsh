@@ -24,21 +24,6 @@ MUNKIROOT="."
 MUNKIROOT=$(cd "$MUNKIROOT"; pwd)
 OUTPUTDIR="$(pwd)"
 
-# Change what is needed below this line
-# _____________________
-# Change DevApp to your personal/company Developer ID Application Name + ID number
-DevApp="Developer ID Application: Name/Company (ID)"
-# Change DevInst to your personal/company Developer ID Installer Name + ID number
-DevInst="Developer ID Installer: Name/Company (ID)"
-# Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
-BUNDLE_ID="com.googlecode.munki"
-# Apple Developer account e-mail
-AppleAcc="DeveloperAppleAcc@Apple.com"
-# Apple Developer app-specific password https://support.apple.com/en-us/HT204397
-AppleAccPwd="Apple Developer Account app-specific password"
-
-# Stop changing!
-
 # Update munki to latest version
 # Disable with # before the command if you dont want it to update
 git pull
@@ -54,7 +39,7 @@ fi
 
 $MUNKIROOT/code/tools/build_python_framework.sh
 
-#get current python version used in Munki build so that it doesn't have to be hardcoded 
+#get current python version used in Munki build so that it doesn't have to be hardcoded
 PYTHON_FRAMEWORK_VERSION=$(ls Python.framework/Versions | grep -v "Current")
 
 find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/lib/ -type f -perm -u=x -exec codesign --force --deep --verbose -s "$DevApp" {} \;
@@ -71,8 +56,13 @@ codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist 
 codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
+# Change for if you want a package that includes the client settings for the installation
 
+# Without client settings for munki
 sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
+
+#With client settings for munki
+#sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
 
 # Get filename for munkitools file that was created above
 BUNDLE_PKG=$( ls munkitools-[0-9]* )
@@ -94,7 +84,7 @@ function finish {
 trap finish EXIT
 
 # submit app for notarization
-if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$AppleAcc" --password "$AppleAccPwd" -f "$BUNDLE_PKG" > "$NOTARIZE_APP_LOG" 2>&1; then
+if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --password @keychain:Apple_dev_acc -f "$BUNDLE_PKG" > "$NOTARIZE_APP_LOG" 2>&1; then
 	cat "$NOTARIZE_APP_LOG"
 	RequestUUID=$(awk -F ' = ' '/RequestUUID/ {print $2}' "$NOTARIZE_APP_LOG")
 
@@ -103,7 +93,7 @@ if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$App
   echo "Waiting on Apple to approve the notarization so it can be stapled. This can take a few minutes or more. Script auto checks every 60 sec"
 
 		# check notarization status
-		if xcrun altool --notarization-info "$RequestUUID" --username "$AppleAcc" --password "$AppleAccPwd" > "$NOTARIZE_INFO_LOG" 2>&1; then
+		if xcrun altool --notarization-info "$RequestUUID" --password @keychain:Apple_dev_acc > "$NOTARIZE_INFO_LOG" 2>&1; then
 			cat "$NOTARIZE_INFO_LOG"
 
 			# once notarization is complete, run stapler and exit

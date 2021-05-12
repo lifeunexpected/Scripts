@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SoftwareRepoURL</key>
+	<string>https://munkiserver.com</string>
+	<key>ClientIdentifier</key>
+	<string>temp_munki_client</string>
+	<key>ShowOptionalInstallsForHigherOSVersions</key>
+	<string>true</string>
+</dict>
+</plist>
