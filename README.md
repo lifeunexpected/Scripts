@@ -45,7 +45,8 @@ OR
 
 You can look for the git tag for the specific version you want on the website below like showed in the picture
 https://github.com/munki/munki/releases/
-![alt text](https://ibb.co/FBxWmPM)
+
+<a href="https://ibb.co/FBxWmPM"><img src="https://i.ibb.co/FBxWmPM/GitTag.png" alt="GitTag" border="0"></a>
 
 4: Run "Munki.Notarize.Specific.Git.Version.zsh -b VersionNumber" to build the specific version you want
 
