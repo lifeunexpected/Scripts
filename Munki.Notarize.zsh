@@ -39,7 +39,7 @@ AppleAccPwd="Apple Developer Account app-specific password"
 
 # Stop changing!
 
-# Update munki too latest version
+# Update munki to latest version
 # Disable with # before the command if you dont want it to update
 git pull
 
@@ -54,17 +54,20 @@ fi
 
 $MUNKIROOT/code/tools/build_python_framework.sh
 
-find $MUNKIROOT/Python.framework/Versions/3.8/lib/ -type f -perm -u=x -exec codesign --force --deep --verbose -s "$DevApp" {} \;
-find $MUNKIROOT/Python.framework/Versions/3.8/bin/ -type f -perm -u=x -exec codesign --force --deep --verbose -s "$DevApp" {} \;
+#get current python version used in Munki build so that it doesn't have to be hardcoded 
+PYTHON_FRAMEWORK_VERSION=$(ls Python.framework/Versions | grep -v "Current")
 
-find $MUNKIROOT/Python.framework/Versions/3.8/lib/ -type f -name "*dylib" -exec codesign --force --deep --verbose -s "$DevApp" {} \;
-find $MUNKIROOT/Python.framework/Versions/3.8/lib/ -type f -name "*so" -exec codesign --force --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/lib/ -type f -perm -u=x -exec codesign --force --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/bin/ -type f -perm -u=x -exec codesign --force --deep --verbose -s "$DevApp" {} \;
+
+find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/lib/ -type f -name "*dylib" -exec codesign --force --deep --verbose -s "$DevApp" {} \;
+find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/lib/ -type f -name "*so" -exec codesign --force --deep --verbose -s "$DevApp" {} \;
 
 /usr/libexec/PlistBuddy -c "Add :com.apple.security.cs.allow-unsigned-executable-memory bool true" $MUNKIROOT/entitlements.plist
 
-codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.8/Resources/Python.app/
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/Resources/Python.app/
 
-codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/3.8/bin/python3.8
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/bin/"python$PYTHON_FRAMEWORK_VERSION"
 codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
@@ -74,7 +77,7 @@ sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$
 # Get filename for munkitools file that was created above
 BUNDLE_PKG=$( ls munkitools-[0-9]* )
 
-# prepair munkitools for notarization and signing
+# prepare munkitools for notarization and signing
 LocalUser=$(whoami)
 sudo chown $LocalUser $BUNDLE_PKG
 
@@ -97,7 +100,7 @@ if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$App
 
 	# check status periodically
 	while sleep 60 && date; do
-  echo "Waiting on Apple too approve the notarization so it can be stapled. This can take a few minutes or more. Script auto checks every 60 sec"
+  echo "Waiting on Apple to approve the notarization so it can be stapled. This can take a few minutes or more. Script auto checks every 60 sec"
 
 		# check notarization status
 		if xcrun altool --notarization-info "$RequestUUID" --username "$AppleAcc" --password "$AppleAccPwd" > "$NOTARIZE_INFO_LOG" 2>&1; then
@@ -105,12 +108,19 @@ if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$App
 
 			# once notarization is complete, run stapler and exit
 			if ! grep -q "Status: in progress" "$NOTARIZE_INFO_LOG"; then
-				xcrun stapler staple "$BUNDLE_PKG"
-				mv $BUNDLE_PKG Notarized-$BUNDLE_PKG
-				# Renames the $BUNDLE_PKG file too Notarized-$BUNDLE_PKG so the script can run again without any problems
-				echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"
-				echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
-				exit $?
+				#wait for package to be successfully notarized before renaming; if notarization fails the file will still be renamed accordingly
+				if grep -q "Status Message: Package Approved" "$NOTARIZE_INFO_LOG"; then
+					xcrun stapler staple "$BUNDLE_PKG"
+					mv $BUNDLE_PKG Notarized-$BUNDLE_PKG
+					# Renames the $BUNDLE_PKG file too Notarized-$BUNDLE_PKG so the script can run again without any problems
+					echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"
+					echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
+					exit $?
+				else
+					echo "Notarization Unsuccessful; $BUNDLE_PKG is still available as a signed package"
+					exit 1
+
+				fi
 			fi
 		else
 			cat "$NOTARIZE_INFO_LOG" 1>&2
