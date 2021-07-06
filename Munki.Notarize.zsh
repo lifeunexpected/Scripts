@@ -18,6 +18,12 @@
 # Tip: if you get “You must first sign the relevant contracts online. (1048)” error
 # Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
 
+# Change what is needed below this line
+# _____________________
+# Change DevApp to your personal/company Developer ID Application Name + ID number
+DevApp="Developer ID Application: Name/Company (ID)"
+# Change DevInst to your personal/company Developer ID Installer Name + ID number
+DevInst="Developer ID Installer: Name/Company (ID)"
 # Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
 BUNDLE_ID="com.googlecode.munki"
 
