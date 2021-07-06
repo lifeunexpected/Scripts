@@ -47,12 +47,14 @@ Usage: $(basename "$0") [-b branch ] [-r revision] [<make_munki_mpkg.sh options>
     -S cert_cn  Sign apps with a Developer ID Application certificated from
                 keychain. Provide the certificate's Common Name.
                 Ex: "Developer ID Application: Munki (U8PN57A5N2)"
+    -T pemfile  Include a pkg to install a client certificate for server mTLS
+                mutual authentication, at /Library/Managed Installs/certs/.
 
 EOF
 }
 
 ADDITIONALARGS=""
-while getopts "b:r:i:o:n:c:s:S:pBmhR" option
+while getopts "b:r:i:o:n:c:s:S:T:pBmhR" option
 do
     case $option in
         "b")
@@ -90,6 +92,9 @@ do
             ;;
         "R")
             ADDITIONALARGS="${ADDITIONALARGS} -R"
+            ;;
+        "T")
+            ADDITIONALARGS="${ADDITIONALARGS} -T \"$OPTARG\""
             ;;
         "h" | *)
             usage
@@ -136,7 +141,7 @@ cp $OUTPUTDIR/code/tools/Munki.Notarize.zsh $MUNKIDIR/code/tools/
 cp $OUTPUTDIR/code/tools/MunkiClientSettings.plist $MUNKIDIR/code/tools/
 
 # now use the version of the MunkiPythonNotarizeAndSignedPrivate.zsh script in the Git repo to get the files notarized
-CMD="\"$MUNKIDIR/code/tools/Munki.Notarize.zsh" -r \"$MUNKIDIR\" -o \"$OUTPUTDIR\" $ADDITIONALARGS"
+CMD="\"$MUNKIDIR/code/tools/Munki.Notarize.zsh\" -r \"$MUNKIDIR\" -o \"$OUTPUTDIR\" $ADDITIONALARGS"
 eval $CMD
 
 exit $?
