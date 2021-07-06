@@ -133,6 +133,7 @@ fi
 
 # Copy notarization script to munki-git folder
 cp $OUTPUTDIR/code/tools/Munki.Notarize.zsh $MUNKIDIR/code/tools/
+cp $OUTPUTDIR/code/tools/MunkiClientSettings.plist $MUNKIDIR/code/tools/
 
 # now use the version of the MunkiPythonNotarizeAndSignedPrivate.zsh script in the Git repo to get the files notarized
 CMD="\"$MUNKIDIR/code/tools/Munki.Notarize.zsh" -r \"$MUNKIDIR\" -o \"$OUTPUTDIR\" $ADDITIONALARGS"
