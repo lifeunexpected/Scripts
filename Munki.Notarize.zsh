@@ -62,6 +62,9 @@ find $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/lib/ -type f
 codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/Resources/Python.app/
 
 codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/bin/"python$PYTHON_FRAMEWORK_VERSION"
+
+codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist --deep --verbose -s "$DevApp" $MUNKIROOT/Python.framework/Versions/$PYTHON_FRAMEWORK_VERSION/bin/"python$PYTHON_FRAMEWORK_VERSION-intel64"
+
 codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
