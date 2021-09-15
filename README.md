@@ -21,23 +21,38 @@ xcrun altool --store-password-in-keychain-item Apple_dev_acc -u 'AppleDev@accoun
 
 Explained: Add  your Apple Developer ID e-mail account behind " -u " and add Apple Developer app-specific password being " -p "
 
-## Step 2: How to set up Munki and copy scripts to correct folder
+## Step 2:
+1: Download the scripts
+2: Open Munki.Notarize.zsh in your text editor TextEdit, Atom etc
+3: Go to Line number 21 and change the following to match your Apple Developer ID info and save the file
+
+Tip: You can find you Apple Devoloper ID Name and ID number in Keychain just search for Installer and Application.
+You should then see "Apple Developer ID Application: Name/Company (ID)" and "Apple Developer ID Installer: Name/Company (ID)"
+
+# Change what is needed below this line
+# _____________________
+# Change DevApp to your Apple personal/company Developer ID Application Name + ID number
+DevApp="Developer ID Application: Name/Company (ID)"
+# Change DevInst to your personal/company Developer ID Installer Name + ID number
+DevInst="Developer ID Installer: Name/Company (ID)"
+# Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
+BUNDLE_ID="com.googlecode.munki"
+
+## Step 3: How to set up Munki and copy scripts to correct folder
 
 1: Open terminal --> cd "To the folder you want munki to be in"
 Tip: If you get some type of warning or access problem you could try to use this folder for munki building "/Users/Shared/"
 
 2: Type in terminal: git clone https://github.com/munki/munki.git
 
-3: Copy the scripts to the "munki/code/tools" folder
+3: Copy the scripts to the "munki/code/tools" folder that was created in the step abow
 
 4: In terminal type "cd /Path/To/munki/Folder" where the git repo folder is located
 
-## Step 3: Building a specific munki version (Recommended way)
+## Step 4: Building a specific munki version (Recommended way)
 More detailed information is here: https://github.com/munki/munki/wiki/Building-Munki-packages
 
-1: Copy Munki.Notarize.Specific.Git.Version.zsh, Munki.Notarize.zsh and MunkiClientSettings.plist to munki/code/tools/ folder
-
-2: In terminal type "cd munki" too where the git repo folder is located
+2: In terminal type "cd /Path/To/munki/Folder" too where the git repo folder is located that you made in the steps above
 
 3: Type "git tag" in Terminal and press the "Enter" key until you find the build version you want to make.
 
@@ -55,8 +70,7 @@ https://github.com/munki/munki/releases/
 6: If everything goes correct a notarized packaged file will be built to munki/munki-git folder
 
 
-
-###### Building latest version running only Munki.Notarize.zsh (Only recommended for testing)
+###### Building latest version running only Munki.Notarize.zsh (Not really recommended but it works, so you should use the method in step 4)
 Tip: Since munki can get different commits its recommended to build the specific munki version you want but you can run Munki.Notarize.zsh if you want.
 
 1: Copy Munki.Notarize.Specific.Git.Version.zsh, Munki.Notarize.zsh and MunkiClientSettings.plist to munki/code/tools/ folder
