@@ -24,7 +24,7 @@ Explained: Add  your Apple Developer ID e-mail account behind " -u " and add App
 ## Step 2:
 1: Download the scripts
 2: Open Munki.Notarize.zsh in your text editor TextEdit, Atom etc
-3: Go to Line number 21 and change "Name/Company (ID)" to match your Apple Developer ID info and save the file
+3: Go to "Change what is needed below this line" and change "Name/Company (ID)" to match your Apple Developer ID info and save the file
 
 Tip: You can find you Apple Devoloper ID Name and ID number in Keychain just search for Installer and Application.
 You should then see "Apple Developer ID Application: Name/Company (ID)" and "Apple Developer ID Installer: Name/Company (ID)"
