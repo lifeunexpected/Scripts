@@ -29,13 +29,11 @@ Explained: Add  your Apple Developer ID e-mail account behind " -u " and add App
 Tip: You can find you Apple Devoloper ID Name and ID number in Keychain just search for Installer and Application.
 You should then see "Apple Developer ID Application: Name/Company (ID)" and "Apple Developer ID Installer: Name/Company (ID)"
 
- Change what is needed below this line
- _____________________
- Change DevApp to your Apple personal/company Developer ID Application Name + ID number
+Change DevApp to your Apple personal/company Developer ID Application Name + ID number
 DevApp="Developer ID Application: Name/Company (ID)"
- Change DevInst to your personal/company Developer ID Installer Name + ID number
+Change DevInst to your personal/company Developer ID Installer Name + ID number
 DevInst="Developer ID Installer: Name/Company (ID)"
- Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
+Change Bundle_ID if you are using a custom one, default is "com.googlecode.munki"
 BUNDLE_ID="com.googlecode.munki"
 
 ## Step 3: How to set up Munki and copy scripts to correct folder
