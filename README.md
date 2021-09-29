@@ -90,7 +90,7 @@ Partial fix: Try macOS Mojave 10.14.6 and Xcode 11.3.1 this the latest version t
 Somebody have manged to make it work on macOS Catalina if they put the munki files in /Users/Shared folders.
 You could probably run older versions of Xcode but havent tried. 
 
-### Tips
+## Tips
 
 Tip 1: If you want to create a munki.pkg installer with Custom Client Settings you can modify the Munki.Notarize.zsh and just switch the " # " in front of the commands below
 Example below will create a munki.pkg without custom client settings.
@@ -101,5 +101,19 @@ sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$
 #With client settings for munki
 #sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
 
- Tip 2: If you get “You must first sign the relevant contracts online. (1048)” error
- Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
+Tip 2: If you get “You must first sign the relevant contracts online. (1048)” error
+Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
+ 
+## Known problems
+Updated 29 September 2021
+ 
+Munki v5.5.0 & v5.5.1 on Apple M1 problems
+There is a known problem with packaging Munki v5.5.0 and v5.5.1 caused by PyobjC that triggers problems for Xattr during the build process.
+There is also a problem with Xcode 12.5 and 12.5.1 
+
+If you want to notarize or build Munki v5.5.0 & v5.5.1 its recommended to use the following:
+CPU: Intel
+OS: macOS 11.4 maybe 11.5 and 11.6 will work but i havent tried.
+Xcode: 12.4 (12.3 might work) 12.5 and 12.5.1 DONT work, Not tested on Xcode 13 yet
+https://github.com/lifeunexpected/Scripts/issues/5
+https://github.com/munki/munki/issues/1100#issuecomment-900119943
