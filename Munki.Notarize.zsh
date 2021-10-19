@@ -68,13 +68,18 @@ codesign --force --options runtime --entitlements $MUNKIROOT/entitlements.plist 
 codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 
 # Creating munkitools.pkg
-# Change for if you want a package that includes the client settings for the installation
+# Ask's if you want too build a package that includes the client settings for the installation or not
+echo
+echo
+echo "Build munkitools.pkg and include the MunkiClientSettings.plist for your custom client settings?"
 
-# Without client settings for munki
-sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
-
-#With client settings for munki
-#sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
+if read -q "? Yes/No: "; then
+  echo "Building munkitools.pkg with client settings for munki"
+  sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
+else
+  echo "Building munkitools.pkg without client settings"
+  sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
+fi
 
 # Get filename for munkitools file that was created above
 BUNDLE_PKG=$( ls munkitools-[0-9]* )
