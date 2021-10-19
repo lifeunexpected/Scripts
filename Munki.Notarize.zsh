@@ -75,7 +75,7 @@ echo "Do you want to include a configuration package using the preferences defin
             MunkiClientSettings.plist?"
 
 if read -q "? Yes/No: "; then
-  echo "Building munkitools.pkg including the configuration package using the preferences defined in the
+  echo "Building munkitools.pkg that includes the configuration package using the preferences defined in the
               MunkiClientSettings.plist"
   sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
 else
