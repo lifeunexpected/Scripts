@@ -71,13 +71,15 @@ codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 # Ask's if you want too build a package that includes the client settings for the installation or not
 echo
 echo
-echo "Build munkitools.pkg and include the MunkiClientSettings.plist for your custom client settings?"
+echo "Do you want to include a configuration package using the preferences defined in the
+            MunkiClientSettings.plist?"
 
 if read -q "? Yes/No: "; then
-  echo "Building munkitools.pkg with client settings for munki"
+  echo "Building munkitools.pkg including the configuration package using the preferences defined in the
+              MunkiClientSettings.plist"
   sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
 else
-  echo "Building munkitools.pkg without client settings"
+  echo "Building munkitools.pkg without a configuration package"
   sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
 fi
 
