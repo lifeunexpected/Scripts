@@ -103,17 +103,3 @@ sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$
 
 Tip 2: If you get “You must first sign the relevant contracts online. (1048)” error
 Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
- 
-## Known problems
-Updated 29 September 2021
- 
-Munki v5.5.0 & v5.5.1 on Apple M1 problems
-There is a known problem with packaging Munki v5.5.0 and v5.5.1 caused by PyobjC that triggers problems for Xattr during the build process.
-There is also a problem with Xcode 12.5 and 12.5.1 
-
-If you want to notarize or build Munki v5.5.0 & v5.5.1 its recommended to use the following:
-CPU: Intel
-OS: macOS 11.4 maybe 11.5 and 11.6 will work but i havent tried.
-Xcode: 12.4 (12.3 might work) 12.5 and 12.5.1 DONT work, Not tested on Xcode 13 yet
-https://github.com/lifeunexpected/Scripts/issues/5
-https://github.com/munki/munki/issues/1100#issuecomment-900119943
