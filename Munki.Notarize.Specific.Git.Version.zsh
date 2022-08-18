@@ -34,10 +34,8 @@ Usage: $(basename "$0") [-b branch ] [-r revision] [<make_munki_mpkg.sh options>
     -n orgname  Specify the name of the organization
     -p          Build Python.framework even if one exists
     -B          Include a package that sets Munki's bootstrap mode
-    -m          Build the package in a manner suitable for install via MDM;
-                specifically, attempt to start all the launchd agents and
-                daemons without requiring a restart. Such a package is not
-                suited for upgrade installs or install via Munki itself.
+    -A          Auto run managedsoftwareupdate immediately after install. This
+                really should be used only with DEP/ADM enrollments.
     -c plist    Build a configuration package using the preferences defined in a
                 plist file
     -R          Include a pkg to install Rosetta2 on ARM-based hardware.
@@ -54,7 +52,7 @@ EOF
 }
 
 ADDITIONALARGS=""
-while getopts "b:r:i:o:n:c:s:S:T:pBmhR" option
+while getopts "b:r:i:o:n:c:s:S:T:pBAhR" option
 do
     case $option in
         "b")
@@ -87,8 +85,8 @@ do
         "B")
             ADDITIONALARGS="${ADDITIONALARGS} -B"
             ;;
-        "m")
-            ADDITIONALARGS="${ADDITIONALARGS} -m"
+        "A")
+            ADDITIONALARGS="${ADDITIONALARGS} -A"
             ;;
         "R")
             ADDITIONALARGS="${ADDITIONALARGS} -R"

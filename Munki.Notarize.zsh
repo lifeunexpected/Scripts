@@ -9,6 +9,7 @@
 # https://github.com/rednoah/notarize-app/blob/master/notarize-app - rednoah
 # https://github.com/munki/munki/tree/master/code/tools - Greg Neagle
 # https://stackoverflow.com/a/57083245 - Perry
+# https://scriptingosx.com/2021/07/notarize-a-command-line-tool-with-notarytool/
 
 # 1: Copy script to Munki folder
 # 2: In terminal "cd FolderWheremunki" git repo is located
@@ -28,6 +29,7 @@ DevInst="Developer ID Installer: Name/Company (ID)"
 BUNDLE_ID="com.googlecode.munki"
 
 # Defaults do NOT Change!
+Credential_Profile="Notary-Tool"
 MUNKIROOT="."
 # Convert to absolute path.
 MUNKIROOT=$(cd "$MUNKIROOT"; pwd)
@@ -71,12 +73,10 @@ codesign --force --deep --verbose -s  "$DevApp" $MUNKIROOT/Python.framework
 # Ask's if you want too build a package that includes the client settings for the installation or not
 echo
 echo
-echo "Do you want to include a configuration package using the preferences defined in the
-            MunkiClientSettings.plist?"
+echo "Do you want to include a configuration package using the preferences defined in the MunkiClientSettings.plist?"
 
 if read -q "? Yes/No: "; then
-  echo "Building munkitools.pkg that includes the configuration package using the preferences defined in the
-              MunkiClientSettings.plist"
+  echo "Building munkitools.pkg that includes the configuration package using the preferences defined in the MunkiClientSettings.plist"
   sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
 else
   echo "Building munkitools.pkg without a configuration package"
@@ -103,40 +103,25 @@ function finish {
 trap finish EXIT
 
 # submit app for notarization
-if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --password @keychain:Apple_dev_acc -f "$BUNDLE_PKG" > "$NOTARIZE_APP_LOG" 2>&1; then
-	cat "$NOTARIZE_APP_LOG"
-	RequestUUID=$(awk -F ' = ' '/RequestUUID/ {print $2}' "$NOTARIZE_APP_LOG")
+# submit app for notarization
+xcrun notarytool submit "$OUTPUTDIR/$BUNDLE_PKG" \
+                 --keychain-profile "$Credential_Profile" \
+                 --wait
 
-	# check status periodically
-	while sleep 60 && date; do
-  echo "Waiting on Apple to approve the notarization so it can be stapled. This can take a few minutes or more. Script auto checks every 60 sec"
+# Staple the notarized Application
+xcrun stapler staple "$BUNDLE_PKG"
 
-		# check notarization status
-		if xcrun altool --notarization-info "$RequestUUID" --password @keychain:Apple_dev_acc > "$NOTARIZE_INFO_LOG" 2>&1; then
-			cat "$NOTARIZE_INFO_LOG"
+# Renames the $BUNDLE_PKG file too Notarized-$BUNDLE_PKG so the script can run again without any problems
+mv $BUNDLE_PKG Notarized-$BUNDLE_PKG
 
-			# once notarization is complete, run stapler and exit
-			if ! grep -q "Status: in progress" "$NOTARIZE_INFO_LOG"; then
-				#wait for package to be successfully notarized before renaming; if notarization fails the file will still be renamed accordingly
-				if grep -q "Status Message: Package Approved" "$NOTARIZE_INFO_LOG"; then
-					xcrun stapler staple "$BUNDLE_PKG"
-					mv $BUNDLE_PKG Notarized-$BUNDLE_PKG
-					# Renames the $BUNDLE_PKG file too Notarized-$BUNDLE_PKG so the script can run again without any problems
-					echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"
-					echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
-					exit $?
-				else
-					echo "Notarization Unsuccessful; $BUNDLE_PKG is still available as a signed package"
-					exit 1
+echo
+echo "Renamed $BUNDLE_PKG to Notarized-$BUNDLE_PKG to let you know it was notarized"
+echo "You can check if its notarized properly with Taccy - https://eclecticlight.co/taccy-signet-precize-alifix-utiutility-alisma/"
+echo
 
-				fi
-			fi
-		else
-			cat "$NOTARIZE_INFO_LOG" 1>&2
-			exit 1
-		fi
-	done
-else
-	cat "$NOTARIZE_APP_LOG" 1>&2
-	exit 1
-fi
+# how SPCTL Log
+echo Show SPCTL Log
+spctl --assess -vv --type install "$OUTPUTDIR/Notarized-$BUNDLE_PKG"
+
+# Show the notarized Application in Finder
+open -R "$OUTPUTDIR/Notarized-$BUNDLE_PKG"

@@ -8,20 +8,56 @@ Renaming is done since its unkown if the older files in munki folder are notariz
 - Signes the the custom python.pkg for munkitools to make it work with notarization later on in the script.
 - Uploads the finished packaged munkitools-version.pkg to Apple to get it approver for notarization.
 When and if Apple approves it for notarization it gets automaticly stapled and signed so it completes the notarization process.
-- Re-names the finished munkitools-version.pkg too Notarized-munkitools-version.pkg so it's easy to see it has been notarized. 
+- Re-names the finished munkitools-version.pkg too Notarized-munkitools-version.pkg so it's easy to see it has been notarized.
 You can then run the script again if you want too.
 
-## Step 1: How to set up Apple Developer App-Specific Password:
+## Update regarding Apple Altool
+Apple´s Altool software that the original script uses to notarize the app will be deprecated fall 2023 and the new tool is Notarytool.
+Because of this the script has been updated and the guide below has been updated also.
+Step 1 in the guide below has been updated to guide you thrue how to set a NotaryTool keychain profile.
+This new keychain profile will be used to notarize the app.
 
-1: Create an Apple Developer app-specific password with following the link below.
+## Step 1: What you will need to notarize and sign software
+- Apple Developer account
+- Apple Developer ID Application Certificate in keychain
+- Apple Developer ID Installer Certificate in keychain
+- Apple Developer App-Specific Password
+- Xcode installed on your Mac or at least Xcode Command Line Tools
+
+## Step 2: How to set up Apple Developer App-Specific Password:
+
+1: Create an Apple Developer app-specific password using the guide in the link below.
 https://support.apple.com/en-us/HT204397
 
+Step 2 below has been updated to use the new notarytool not altool that was originally used
 2: Open "Terminal.app" and run command below
-xcrun altool --store-password-in-keychain-item Apple_dev_acc -u 'AppleDev@account.com' -p AppSpecificPassword
+xcrun notarytool store-credentials --apple-id "name@example.com" --team-id "ABCD123456"
 
-Explained: Add  your Apple Developer ID e-mail account behind " -u " and add Apple Developer app-specific password being " -p "
+More detailed:
+When you enter the Command you will be asked to type in a Profile Name then the App-specific password you created in the step abow it
+will then validate what you typed in and if it was correct you will get "Success. Credentials validated. Credentials saved to Keychain."
 
-## Step 2:
+What happens when you run the command abow:
+This process stores your credentials securely in the Keychain. You reference these credentials later using a profile name.
+
+Profile name:
+notary-example.com
+Password for name@example.com:
+Validating your credentials...
+Success. Credentials validated.
+Credentials saved to Keychain.
+To use them, specify `--keychain-profile "notary-example.com"`
+
+
+Command explained:
+Store-Credentials = the name that will be used later in the script
+Add your Apple Developer ID e-mail account behind " --apple-id " and add your Apple Team ID " --team-id "
+
+Tip: You can find you Apple Devoloper Team ID number in Keychain just search for Installer and Application.
+
+You should then see "Apple Developer ID Application: Name/Company (Team ID)" and "Apple Developer ID Installer: Name/Company (Team ID)"
+
+## Step 3:
 1: Download the scripts
 
 2: Open Munki.Notarize.zsh in your text editor TextEdit, Atom etc
@@ -32,7 +68,7 @@ Tip: You can find you Apple Devoloper ID Name and ID number in Keychain just sea
 
 You should then see "Apple Developer ID Application: Name/Company (ID)" and "Apple Developer ID Installer: Name/Company (ID)"
 
-## Step 3: How to set up Munki and copy scripts to correct folder
+## Step 4: How to set up Munki and copy scripts to correct folder
 
 1: Open terminal --> cd "To the folder you want munki to be in"
 Tip: If you get some type of warning or access problem you could try to use this folder for munki building "/Users/Shared/"
@@ -43,7 +79,12 @@ Tip: If you get some type of warning or access problem you could try to use this
 
 4: In terminal type "cd /Path/To/munki/Folder" where the git repo folder is located
 
-## Step 4: Building a specific munki version (Recommended way)
+Tip: You might need to open Terminal and run chmod +x on the files below to make them able to run.
+- Munki.Notarize.Specific.Git.Version.zsh
+- Munki.Notarize.zsh
+- MunkiClientSettings.plist
+
+## Step 5: Building a specific munki version (Recommended way)
 More detailed information is here: https://github.com/munki/munki/wiki/Building-Munki-packages
 
 2: In terminal type "cd /Path/To/munki/Folder" too where the git repo folder is located that you made in the steps above
@@ -88,28 +129,19 @@ The problem seems to be happen with some munki builds but not everyone.
 
 Partial fix: Try macOS Mojave 10.14.6 and Xcode 11.3.1 this the latest version that supports Mojave it should now work without any problems.
 Somebody have manged to make it work on macOS Catalina if they put the munki files in /Users/Shared folders.
-You could probably run older versions of Xcode but havent tried. 
+You could probably run older versions of Xcode but havent tried.
 
 ## Tips
 
-Tip 1: If you want to create a munki.pkg installer with Custom Client Settings you can modify the Munki.Notarize.zsh and just switch the " # " in front of the commands below
-Example below will create a munki.pkg without custom client settings.
- 
-#Without client settings for munki
-sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -o "$OUTPUTDIR"
-
-#With client settings for munki
-#sudo $MUNKIROOT/code/tools/make_munki_mpkg.sh -i "$BUNDLE_ID" -S "$DevApp" -s "$DevInst" -c "$MUNKIROOT/code/tools/MunkiClientSettings.plist" -o "$OUTPUTDIR"
-
-Tip 2: If you get “You must first sign the relevant contracts online. (1048)” error
+Tip 1: If you get “You must first sign the relevant contracts online. (1048)” error
 Go to Apple.developer.com and sign in with the account you are trying to notarize the app with and agree to the updated license agreement.
- 
+
 ## Known problems
 Updated 29 September 2021
- 
+
 Munki v5.5.0 & v5.5.1 on Apple M1 problems
 There is a known problem with packaging Munki v5.5.0 and v5.5.1 caused by PyobjC that triggers problems for Xattr during the build process.
-There is also a problem with Xcode 12.5 and 12.5.1 
+There is also a problem with Xcode 12.5 and 12.5.1
 
 If you want to notarize or build Munki v5.5.0 & v5.5.1 its recommended to use the following:
 CPU: Intel
